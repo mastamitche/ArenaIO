@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/annotations-2.0.1.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/aspectjrt.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/AutomaterAPI.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/colt.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/commons-compress-1.16.1.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/guava-18.0.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/httpasyncclient-4.0.2.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/httpclient-4.3.6.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/httpcore-4.3.3.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/httpcore-nio-4.3-beta2.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/httpmime-4.3.6.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/javassist-3.18.2-GA.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/JDBC.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/json-20140107.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/jzlib-1.1.3.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/reflections-0.9.10.jar"/>
+	<classpathentry kind="lib" path="F:/ArenaIORepo/ArenaIO/ArenaIOServer/lib/unirest-java-1.4.7.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
