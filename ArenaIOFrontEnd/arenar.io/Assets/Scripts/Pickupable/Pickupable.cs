@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Pickupable : MonoBehaviour {
 
+
+
 	// Use this for initialization
 	void Start () {
 	
@@ -18,6 +20,7 @@ public class Pickupable : MonoBehaviour {
             if(pickUP(collision.gameObject))
                 Destroy(gameObject);
     }
+
     public virtual bool pickUP(GameObject player)
     {
         return true;

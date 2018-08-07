@@ -8,8 +8,8 @@ public class PlayerController : MonoBehaviour
 
     public float acceleration = 1;
 
-    Vector3 mouse_pos;
-    Vector3 object_pos;
+    Vector3 mousePos;
+    Vector3 objectPos;
     float angle;
     // Use this for initialization
     void Start()
@@ -28,15 +28,29 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) vecToMove += new Vector3(0, -1, 0);
         if (vecToMove.sqrMagnitude > 0)
             gameObject.GetComponent<Rigidbody2D>().AddForce(vecToMove.normalized * acceleration);
+        onMoveOrRotate();
+    }
+
+
+    Vector3 lastMove = new Vector3();
+    float lastAngle = 0;
+    void onMoveOrRotate()
+    {
+        Vector3 pos = transform.position;
+        float rot = transform.rotation.z;
+        if (lastMove == pos && lastAngle == rot) return;
+        lastMove = pos;
+        lastAngle = rot;
+        Networking.sendPlayerMove(new Vector2(pos.x, pos.y), rot);
     }
 
     void rotateTowardsMouse()
     {
-        mouse_pos = Input.mousePosition;
-        object_pos = Camera.main.WorldToScreenPoint(playerCircle.transform.position);
-        mouse_pos.x = mouse_pos.x - object_pos.x;
-        mouse_pos.y = mouse_pos.y - object_pos.y;
-        angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
+        mousePos = Input.mousePosition;
+        objectPos = Camera.main.WorldToScreenPoint(playerCircle.transform.position);
+        mousePos.x = mousePos.x - objectPos.x;
+        mousePos.y = mousePos.y - objectPos.y;
+        angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
         playerCircle.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }
 
