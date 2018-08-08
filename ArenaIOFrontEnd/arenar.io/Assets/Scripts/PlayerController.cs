@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public GameObject playerCircle;
 
     public float acceleration = 1;
+    public int weaponID = -1;
 
     Vector3 mousePos;
     Vector3 objectPos;
@@ -20,6 +21,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        checkMovementInput();
+        checkWeaponInput();
+    }
+
+    public void checkMovementInput()
+    {
         rotateTowardsMouse();
         Vector3 vecToMove = Vector3.zero;
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) vecToMove += new Vector3(-1, 0, 0);
@@ -29,6 +36,15 @@ public class PlayerController : MonoBehaviour
         if (vecToMove.sqrMagnitude > 0)
             gameObject.GetComponent<Rigidbody2D>().AddForce(vecToMove.normalized * acceleration);
         onMoveOrRotate();
+    }
+
+    public void checkWeaponInput()
+    {
+        if (weaponID == -1) return;
+        if (Input.GetMouseButton(0) )
+            Networking.onPlayerFire();
+        if (Input.GetKey(KeyCode.R))
+            Networking.onPlayerReload();
     }
 
 
@@ -52,6 +68,7 @@ public class PlayerController : MonoBehaviour
         mousePos.y = mousePos.y - objectPos.y;
         angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
         playerCircle.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        onMoveOrRotate();
     }
 
 }

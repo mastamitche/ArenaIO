@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Pickupable : MonoBehaviour {
-
-
-
-	// Use this for initialization
-	void Start () {
+public class Pickupable : Entity
+{
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
@@ -23,6 +21,7 @@ public class Pickupable : MonoBehaviour {
 
     public virtual bool pickUP(GameObject player)
     {
+        Networking.onPlayerPickup(ID);
         return true;
     }
 }

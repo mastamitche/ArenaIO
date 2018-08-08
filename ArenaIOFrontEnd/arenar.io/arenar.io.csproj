@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>2017.3.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -300,19 +302,16 @@
     <Compile Include="Assets\Scripts\AmmoSpawner.cs" />
     <Compile Include="Assets\Scripts\Bar.cs" />
     <Compile Include="Assets\Scripts\Bullet.cs" />
+    <Compile Include="Assets\Scripts\Consts.cs" />
+    <Compile Include="Assets\Scripts\Entity.cs" />
+    <Compile Include="Assets\Scripts\EntityLerper.cs" />
+    <Compile Include="Assets\Scripts\LocalState.cs" />
     <Compile Include="Assets\Scripts\Networking.cs" />
     <Compile Include="Assets\Scripts\NetworkingUtility.cs" />
     <Compile Include="Assets\Scripts\Openable\Openable.cs" />
-    <Compile Include="Assets\Scripts\Pickupable\GroundAmmo.cs" />
-    <Compile Include="Assets\Scripts\Pickupable\GroundArmor.cs" />
-    <Compile Include="Assets\Scripts\Pickupable\GroundHealthPack.cs" />
     <Compile Include="Assets\Scripts\Pickupable\Pickupable.cs" />
-    <Compile Include="Assets\Scripts\Pickupable\Weapons\Chainsaw.cs" />
+    <Compile Include="Assets\Scripts\Pickupable\TextSetter.cs" />
     <Compile Include="Assets\Scripts\Pickupable\Weapons\Projectiles\Projectile.cs" />
-    <Compile Include="Assets\Scripts\Pickupable\Weapons\RocketLauncher.cs" />
-    <Compile Include="Assets\Scripts\Pickupable\Weapons\Saw.cs" />
-    <Compile Include="Assets\Scripts\Pickupable\Weapons\Shotgun.cs" />
-    <Compile Include="Assets\Scripts\Pickupable\Weapons\Weapon.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerInfo.cs" />
     <Compile Include="Assets\Scripts\PlayerWeaponController.cs" />
@@ -340,6 +339,7 @@
     <Compile Include="Assets\Scripts\SmartUI\TimeUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\FloatyText.cs" />
     <Compile Include="Assets\Scripts\Utils\FloatyTextManager.cs" />
+    <Compile Include="Assets\Scripts\Utils\GamePrefabBatcher.cs" />
     <Compile Include="Assets\Scripts\Utils\ScreenHeightText.cs" />
     <Compile Include="Assets\Scripts\Utils\UIScroller.cs" />
     <Compile Include="Assets\Scripts\websocket-sharp\AssemblyInfo.cs" />

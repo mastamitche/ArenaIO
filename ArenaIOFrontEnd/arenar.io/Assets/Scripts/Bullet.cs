@@ -1,20 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Bullet : MonoBehaviour {
-    public float initalSpeed;
-    public int damageAmount = 0;
+public class Bullet : Entity {
 
-    Vector3 velocity;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 	
 	}
-
-    public void setDamageAmount(int _dmg)
-    {
-        damageAmount = _dmg;
-    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -22,14 +14,9 @@ public class Bullet : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player") || collision.gameObject.layer == LayerMask.NameToLayer("Background"))// || collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player") || collision.gameObject.layer == LayerMask.NameToLayer("Background"))
         {
-            if(collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-                if (collision.gameObject.name != "MainPlayer")
-                {
-                    PlayerInfo pi = collision.gameObject.GetComponent<PlayerInfo>();
-                    pi.takeDamage(damageAmount);
-                }
+            Networking.onPlayerPickup(ID);
             Destroy(gameObject);
         }
     }

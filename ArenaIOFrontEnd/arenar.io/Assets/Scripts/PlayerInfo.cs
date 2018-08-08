@@ -1,64 +1,49 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerInfo : MonoBehaviour {
-    public int maxArmor = 0;
-    int currentArmor = 0;
-    public int maxHP = 0;
-    int currentHp = 0;
 
-    //testing
-    bool set = false;
+    public Text ammoText;
+    public Text ReloadText;
+    public Text GunName;
+
+    private int gunID = -1;
+
 	// Use this for initialization
 	void Start () {
-        currentHp = maxHP;
-	}
+        ammoText.gameObject.SetActive(false);
+        ReloadText.gameObject.SetActive(false);
+        GunName.gameObject.SetActive(false);
+        Networking.PlayerInfo += InfoCross;
+    }
+    void InfoCross(int id, int health, int armour, int ammo, int magazine, int magazineSize)
+    {
+        if (id != LocalState.ID) return;
+        changeAmmo(magazine, magazineSize, ammo);
+    }
 	
-	// Update is called once per frame
-	void Update () {
-	    if(Time.fixedTime > 10 && !set)
+    public void changeGunName(int ID)
+    {
+        if (ID == -1) return;
+        gunID = ID;
+        GunName.text = PlayerWeaponController.gunNames[ID];
+        ammoText.gameObject.SetActive(true);
+        GunName.gameObject.SetActive(true);
+    }
+
+
+    public void changeAmmo(int magazine, int magazineSize, int ammo)
+    {
+        if (gunID == -1) return;
+        ammoText.text = magazine + " / " + magazineSize + " : " + ammo;
+        if(magazine == 0)
         {
-            set = true;
-            takeDamage(maxHP/4);
-        }    
-	}
-    public int getMaxArmor()
-    {
-        return maxArmor;
-    }
-    public int getMaxHP()
-    {
-        return maxHP;
-    }
-    public int getHP()
-    {
-        return currentHp;
-    }
-    public int getArmor()
-    {
-        return currentArmor;
-    }
-    
-    public void heal(int amount)
-    {
-        currentHp += amount;
-        if (currentHp > maxHP)
-            currentHp = maxHP;
-        OnHPChange(currentHp, maxHP);
-    }
-    public void takeDamage(int amount)
-    {
-        currentHp -= amount;
-        if (currentHp < 0)
-            currentHp = 0;
-        //if (currentHp == 0)
-            //OnDeath(true);
-        OnHPChange(currentHp, maxHP);
+            ReloadText.gameObject.SetActive(true);
+        }else
+        {
+            ReloadText.gameObject.SetActive(false);
+        }
     }
 
-    public delegate void _OnHPChange(int _currentHP,int _maxHP);
-    public static event _OnHPChange OnHPChange;
-
-    public delegate void _OnDeath(bool _death);
-    public static event _OnDeath OnDeath;
 }

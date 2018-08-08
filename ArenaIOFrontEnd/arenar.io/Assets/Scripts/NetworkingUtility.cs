@@ -74,6 +74,15 @@ public class NetworkingUtility {
         return (Math.Log(n) / Math.Log(2));
     }
 
+    public const float RADIANSTOBYTE = 40.58f;
+    public static byte getAngleByte(float angle)
+    {
+        return (byte)((angle % 6.2832f) * RADIANSTOBYTE);
+    }
+    public static float getAngleFromByte(byte angle)
+    {
+        return (float)(angle / RADIANSTOBYTE);
+    }
 
     public static string ByteArrayToString(byte[] ba) {
         StringBuilder hex = new StringBuilder(ba.Length * 2);
