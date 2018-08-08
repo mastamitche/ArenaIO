@@ -10,6 +10,7 @@ import org.java_websocket.WebSocketImpl;
 
 import com.Entity.*;
 import com.Odessa.utility.PacketHelper;
+import com.Odessa.utility.XSRandom;
 import com.Odessa.utility.vec2;
 
 public class ConnectionHandler {
@@ -50,6 +51,7 @@ public class ConnectionHandler {
     public static byte s_playerFire = 3;
     public static byte s_ping = 4;
     public static byte s_nameReq = 5;
+    public static byte s_reload = 6;
 
     // To client
     public static byte c_serverParams = 0;
@@ -92,10 +94,9 @@ public class ConnectionHandler {
 	    			if (Entity.getEntitiesinRangeMap(pos, server, 7, new byte[]{Entity.TYPE_PLAYER, Entity.TYPE_BULLET}).size() > 0) continue;
 	    		}
 
-	            byte color = blob.get();
+	            byte color = (byte)(XSRandom.random()*10);
 	            player = new Player(this, server, pos, color);
-	            String name = getString(blob);
-	            player.name = server.nm.AddEntry(name);
+	            player.name = server.nm.AddEntry("");
 	        	Send((byte)c_gameState, (byte)1, player.id);
 	        	player.sendPositionReset();
 	        	

@@ -36,7 +36,7 @@ public class HealthPack extends Entity {
 	@Override
 	byte[] getSpawnPacket() throws Exception {
 		return PacketHelper.bytesFromParams(ConnectionHandler.c_entitySpawn,
-				Entity.TYPE_HEALTHPACK, id, pos);
+				Entity.TYPE_HEALTHPACK, id, pos, amount);
 	}
 
 	@Override

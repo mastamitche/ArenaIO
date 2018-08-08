@@ -36,7 +36,7 @@ public class Ammo extends Entity {
 	@Override
 	byte[] getSpawnPacket() throws Exception {
 		return PacketHelper.bytesFromParams(ConnectionHandler.c_entitySpawn,
-				Entity.TYPE_AMMO, id, pos);
+				Entity.TYPE_AMMO, id, pos, amount);
 	}
 
 	@Override

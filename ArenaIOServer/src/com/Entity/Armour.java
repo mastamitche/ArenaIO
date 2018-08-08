@@ -34,7 +34,7 @@ public class Armour extends Entity {
 	}
 	@Override
 	byte[] getSpawnPacket() throws Exception {
-		return PacketHelper.bytesFromParams(ConnectionHandler.c_entitySpawn, Entity.TYPE_ARMOUR, id, pos);
+		return PacketHelper.bytesFromParams(ConnectionHandler.c_entitySpawn, Entity.TYPE_ARMOUR, id, pos, amount);
 	}
 
 	@Override

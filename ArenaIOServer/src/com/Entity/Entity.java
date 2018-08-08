@@ -29,7 +29,7 @@ public abstract class Entity implements ISpatialObject {
 	public static final byte TYPE_ARMOUR = 4;
 	public static final byte TYPE_HEALTHPACK = 5;
 	
-	static byte[] allEntityTypes = new byte[]{Entity.TYPE_PLAYER, Entity.TYPE_SHOTGUN, Entity.TYPE_BULLET, Entity.TYPE_AMMO, Entity.TYPE_ARMOUR};
+	static byte[] allEntityTypes = new byte[]{Entity.TYPE_PLAYER, Entity.TYPE_SHOTGUN, Entity.TYPE_BULLET, Entity.TYPE_AMMO, Entity.TYPE_ARMOUR, TYPE_HEALTHPACK};
 	
 	public byte entityType;
 	@VariableReplication(maxBits=32)

@@ -37,12 +37,12 @@ public class GameServer {
 	}
 	
 	public static QuadTree[] trees = new QuadTree[]{
-			new QuadTree(-4096, -4096, 8192, 8192), // Players
-			new QuadTree(-4096, -4096, 8192, 8192), // Shotgun
-			new QuadTree(-4096, -4096, 8192, 8192), // Bullet
-			new QuadTree(-4096, -4096, 8192, 8192), // Ammo
-			new QuadTree(-4096, -4096, 8192, 8192), // Armour
-			new QuadTree(-4096, -4096, 8192, 8192), // Health Pack
+		new QuadTree(-4096, -4096, 8192, 8192), // Players
+		new QuadTree(-4096, -4096, 8192, 8192), // Shotgun
+		new QuadTree(-4096, -4096, 8192, 8192), // Bullet
+		new QuadTree(-4096, -4096, 8192, 8192), // Ammo
+		new QuadTree(-4096, -4096, 8192, 8192), // Armour
+		new QuadTree(-4096, -4096, 8192, 8192), // Health Pack
 	};
 	
 

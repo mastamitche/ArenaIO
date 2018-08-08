@@ -24,6 +24,8 @@ public class Player extends Entity {
 	public int maxHealth = 100;
 	public int size = 10;
 	public int ammo = 0;
+	public int magazine = 0;
+	public int magazineSize = 10;
 	public int maxAmmo = 250;
 	public boolean isInLeaderBoard = false;
 	public boolean canFire = true;
@@ -169,19 +171,34 @@ public class Player extends Entity {
 	public float hit(Ammo a){
 		ammo = (ammo += a.amount) > maxAmmo ? maxAmmo: ammo;
 		try {
-			notifyOthers(getInfoPacket());
+			conn.Send(getInfoPacket());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return ammo;
 	}
 	
+	public void reload(){
+		if(ammo == 0) return;
+		magazine = ammo > magazineSize ? magazineSize : ammo;
+		ammo -= magazine;
+		try {
+			conn.Send(getInfoPacket());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public float hit(ShotGun g){
 		gunID = 1;
 		canFire = true;
 		//Tell everyone
+		magazineSize = 20;
+		magazine = magazineSize;
+		
 		try {
 			notifyOthers(getGunPacket());
+			conn.Send(getInfoPacket());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -196,7 +213,7 @@ public class Player extends Entity {
 				//Shotgun
 				float spread = 2f;
 				float speed = 1f;
-				int bulletAmount = ammo -= (ammo >= 8 ? 8 : ammo);
+				int bulletAmount = magazine -= (magazine >= 8 ? 8 : magazine);
 				for( int i=0; i < bulletAmount; i++ ){
 		        	vec2 barrelDirection = new vec2((float)Math.cos(angle - spread * bulletAmount/2 + spread * i) , (float)Math.sin(angle - spread * bulletAmount/2 + spread * i));
 		        	new Bullet(server, pos.add(new vec2(2,5)), barrelDirection.scale(speed), this.size, this);
@@ -233,16 +250,16 @@ public class Player extends Entity {
 	
 	@Override
 	public byte[] getSpawnPacket() throws Exception{
-		return PacketHelper.bytesFromParams(ConnectionHandler.c_entitySpawn, Entity.TYPE_PLAYER, id, color, pos, PacketHelper.getAngleByte(angle), size, name, health, armour, ammo, gunID);
+		return PacketHelper.bytesFromParams(ConnectionHandler.c_entitySpawn, Entity.TYPE_PLAYER, id, color, pos, PacketHelper.getAngleByte(angle), size, name, health, maxHealth, armour, maxArmour, ammo, magazine, magazineSize, gunID);
 	}
 	public byte[] getPositionPacket() throws Exception{
 		return PacketHelper.bytesFromParams(ConnectionHandler.c_setEntityPosition, id, pos, PacketHelper.getAngleByte(angle));
 	}
 	public byte[] getInfoPacket() throws Exception{
-		return PacketHelper.bytesFromParams(ConnectionHandler.c_playerStats, id, health, armour, ammo);
+		return PacketHelper.bytesFromParams(ConnectionHandler.c_playerStats,id, health, maxHealth, armour, maxArmour, ammo, magazine, magazineSize);
 	}
 	public byte[] getGunPacket() throws Exception{
-		return PacketHelper.bytesFromParams(ConnectionHandler.c_playerEquip, id, gunID);
+		return PacketHelper.bytesFromParams(ConnectionHandler.c_playerEquip, id, gunID );
 	}
 	public void sendPositionReset(){
 		try {
