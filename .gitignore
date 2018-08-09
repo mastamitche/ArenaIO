@@ -41,3 +41,5 @@ proguard/
 
 # Windows clutter
 Thumbs.db
+/ArenaIOFrontEnd/arenar.io/Library/metadata
+/ArenaIOFrontEnd/arenar.io/Temp
