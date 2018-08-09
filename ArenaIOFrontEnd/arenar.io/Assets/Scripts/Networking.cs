@@ -3,8 +3,9 @@ using System.Collections;
 using WebSocketSharp;
 using System.IO;
 using System;
+using System.Collections.Generic;
 
-public class Networking : MonoBehaviour {
+public class Networking {
     // To server
     public static byte s_spawn = 0;
     public static byte s_playerMove = 1;
@@ -34,42 +35,35 @@ public class Networking : MonoBehaviour {
 
     static WebSocket socket;
 
-    void Awake()
+    public void Start()
     {
         socket = new WebSocket("ws://192.168.1.12:32320");
         socket.OnOpen += (sender,e) => OnOpen();
         socket.OnClose += (sender, e) => OnClose();
         socket.OnError += (sender, e) => OnError();
-        socket.OnMessage += (sender, e) => OnMessage(e);
+        socket.OnMessage += (sender, e) => UnityMainThreadDispatcher.Instance().Enqueue(OnMessage(e));
         socket.Connect();
     }
-
-	// Use this for initialization
-	void Start () {
-	    
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    
     void OnError()
     {
 
     }
 
-    void OnMessage(MessageEventArgs e)
+    IEnumerator OnMessage(MessageEventArgs e)
     {
         if (e.RawData.Length > 0)
             OnPacket(e.RawData);
-        if (e.Data.Length > 0)
-            Debug.Log(e.Data);
+        /*if (e.Data.Length > 0)
+            Debug.Log(e.Data);*/
+        yield return 0;
     }
 
     void OnOpen()
     {
         Debug.Log("Connection open");
-        socket.Send("first message");
+        send(s_ping);
+        send(s_spawn);
     }
 
     void OnClose()
@@ -99,20 +93,41 @@ public class Networking : MonoBehaviour {
                 else if (category == c_setEntityPosition)
                 {
                     int ID = reader.ReadInt32();
+                    print("Setting position of " + ID);
+                    foreach(KeyValuePair<int,Entity> en in Entity.Entities)
+                        print("Entities "+ en.Key);
                     float x = reader.ReadSingle();
                     float y = reader.ReadSingle();
                     float angle = NetworkingUtility.getAngleFromByte(reader.ReadByte());
-                    Entity ent = Entity.Entities[ID];
-                    EntityLerper entLerp = ent.gameObject.GetComponent<EntityLerper>();
-                    if (entLerp != null)
+                    if (Entity.Entities.ContainsKey(ID))
                     {
-                        entLerp.Lerp(new Vector3(x, y));
+                        Entity ent = Entity.Entities[ID];
+                        if (ID != LocalState.ID)
+                        {
+                            EntityLerper entLerp = ent.gameObject.GetComponent<EntityLerper>();
+                            if (entLerp != null)
+                            {
+                                entLerp.Lerp(new Vector3(x, y));
+                            }
+                        }
+                        else
+                        {
+                            PlayerController player = Consts.instance.MainPlayer.transform.Find("Player").GetComponent<PlayerController>();
+                            player.moveLayer(new Vector3(x, y));
+                        }
+                    }
+                    else
+                    {
+                        if (Master.debugPackets)
+                            print("Trying to move not registered Entity with ID : " + ID);
                     }
                 }
                 else if (category == c_entitySpawn)
                 {
                     EntityTypes EntityType = (EntityTypes)reader.ReadByte();
                     int ID = reader.ReadInt32();
+                    if (Master.debugPackets)
+                        print("Spawning " + ID + " of Type " + EntityType);
 
                     if (EntityType == EntityTypes.TYPE_PLAYER) {
                         //( id, color, pos, PacketHelper.getAngleByte(angle), size, name, health, armour, ammo, magazine, magazineSize, gunID);
@@ -138,6 +153,7 @@ public class Networking : MonoBehaviour {
                             player.GetComponent<Entity>().SetEnt(ID);
                         }else
                         {
+                            print("Setting player ID " + ID);
                             GameObject player = Consts.instance.MainPlayer.transform.Find("Player").gameObject;
                             player.GetComponent<Entity>().SetEnt(ID);
                         }
@@ -191,7 +207,14 @@ public class Networking : MonoBehaviour {
                 else if (category == c_entityDespawn)
                 {
                     int ID = reader.ReadInt32();
-                    GamePrefabBatcher.Destroy(Entity.Destroy(ID));
+                    if (Entity.Entities.ContainsKey(ID))
+                    {
+                        GamePrefabBatcher.Destroy(Entity.Destroy(ID));
+                    }else
+                    {
+                        if(Master.debugPackets)
+                            print("Trying to despawn ID " + ID);
+                    }
                 }
                 else if (category == c_playerStats)
                 {
@@ -254,5 +277,9 @@ public class Networking : MonoBehaviour {
             print("Error");
             print(e.StackTrace);
         }
+    }
+    public static void print(String s)
+    {
+        Debug.Log(s);
     }
 }

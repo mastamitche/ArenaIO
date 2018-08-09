@@ -47,7 +47,7 @@ public class BotPlayer extends Player {
 		
 		
 		// Collect 
-		if (runs % 10 == 0){
+		/*if (runs % 10 == 0){
 			HashMap<Integer, Entity> entities = getCollidingEntities(new byte[]{Entity.TYPE_SHOTGUN});
 			Iterator<Entry<Integer, Entity>> iterator = entities.entrySet().iterator();
 	        while(iterator.hasNext()){
@@ -63,7 +63,7 @@ public class BotPlayer extends Player {
         			entry.Destroy();
 	            }
 	        }
-		}
+		}*/
 		try{
 			if ((id + runs) % framesBetweenCalculation == 0){
 	

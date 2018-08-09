@@ -71,13 +71,10 @@ public class serverDistributer extends WebSocketServer {
 			
 			server.setWebSocketFactory( new DefaultSSLWebSocketServerFactory( sslContext ) );
 			server.start();
-			
-			
-			
 			server = new serverDistributer(port);
 			server.start();
 	
-			System.out.println("Generic io server v"+version+" up on ports: "+ port + " and " + (port+1));
+			System.out.println("Arena Io server v"+version+" up on ports: "+ port + " and " + (port+1));
 		} catch (Exception e){
 			e.printStackTrace();
 		}
@@ -100,7 +97,7 @@ public class serverDistributer extends WebSocketServer {
 	public void onClose(WebSocket conn, int code, String reason, boolean remote) {
 		if (printConnections) System.out.println("Closing connection from " + conn.getRemoteSocketAddress());
 		try{
-			//System.out.println("Socket closed");
+			System.out.println("Socket closed");
 			if (conn == null) return;
 			GameServer s = (GameServer) ((WebSocketImpl)conn).connectionHandler.server;
 			((WebSocketImpl)conn).connectionHandler.server = null;
@@ -129,6 +126,7 @@ public class serverDistributer extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, String message) {
 		try{
+			System.out.println("Got message " + message);
 			if (conn == null) return;
 			GameServer s = (GameServer) ((WebSocketImpl)conn).connectionHandler.server;
 			if (s != null)
@@ -141,6 +139,8 @@ public class serverDistributer extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, ByteBuffer blob) {
 		try{
+			System.out.println("Got message blob " +blob);
+			
 			if (conn == null || ((WebSocketImpl)conn).connectionHandler == null) return;
 			((WebSocketImpl)conn).connectionHandler.onMessage(conn, blob);
 		}catch(Exception e){

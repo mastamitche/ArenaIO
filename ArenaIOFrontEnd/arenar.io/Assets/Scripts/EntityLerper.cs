@@ -6,7 +6,7 @@ public class EntityLerper : MonoBehaviour {
     Vector3 start;
     Vector3 end;
     
-    public float speed = 1.0F;
+    public float speed = .1F;
     private float startTime;
     private float len;
 

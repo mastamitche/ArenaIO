@@ -18,6 +18,7 @@ import com.Entity.Ammo;
 import com.Entity.Armour;
 import com.Entity.BotPlayer;
 import com.Entity.Entity;
+import com.Entity.HealthPack;
 import com.Entity.Player;
 import com.Entity.ShotGun;
 import com.Odessa.utility.MultiUniqueIDHandler;
@@ -84,8 +85,6 @@ public class GameServer {
 	}
 	
 	XSRandom rnd;
-	
-
 	public BotManager botManager;
 	public playerUpdater playerUpdater;
 	
@@ -132,6 +131,7 @@ public class GameServer {
 		try{
 			ConnectionHandler p = ((WebSocketImpl)conn).connectionHandler;
 			playerFromConnection.put(conn, p);
+			System.out.println("New connection " + conn.getRemoteSocketAddress());
 		} catch (Exception e){
 			e.printStackTrace();
 		}
@@ -151,18 +151,19 @@ public class GameServer {
 	public void onClose( WebSocket conn, int code, String reason, boolean remote ) {
 		if (conn == null) return;
 		removePlayer(conn);
-		//System.out.println("Closed: Reason: " + reason);
+		System.out.println("Closed: Reason: " + reason);
 	}
 
 	public void onError( WebSocket conn, Exception ex ) {
-		//System.out.println( "Socket Error, inside!");
-		//ex.printStackTrace();
+		System.out.println( "Socket Error, inside!");
+		ex.printStackTrace();
 		if (conn == null) return;
 		onClose(conn, 520, "Errored", false);
 	}
 
 	public void onMessage( WebSocket conn, String message ) {
-		//conn.send( message );
+		System.out.println( "Got Game Server Message");
+		conn.send( message );
 	}
 	
 	public vec2 rndPosInWorld(){
@@ -178,30 +179,19 @@ public class GameServer {
 	}
 	
 	public void RefillPickupables(int maxAmount) {
-		for (int i = 1; i < maxAmount; i++) {
-			if(i%1 == 0){
-				addShotgun();
-			}
-			else if(i%2 == 0){
-				addAmmo();
-			}
-			else if(i%3 == 0){
-				addArmour();
+		for (int i = 1; i <= maxAmount; i++) {
+			if(Ammo.count < Ammo.maxCount){
+				new Ammo(this, rndPosInWorld());
+			}else if(ShotGun.count < ShotGun.maxCount){
+				new ShotGun(this, rndPosInWorld());
+			}else if(Armour.count < Armour.maxCount){
+				new Armour(this, rndPosInWorld());
+			}else if(HealthPack.count < HealthPack.maxCount){
+				new HealthPack(this, rndPosInWorld());
+			}else{
+				break;
 			}
 		}
-	}
-	
-	public void addShotgun() {
-		for (int i = 0; i < ShotGun.maxCount; i++)
-			new ShotGun(this, rndPosInWorld());
-	}
-	public void addAmmo() {
-		for (int i = 0; i < Ammo.maxCount; i++)
-			new Ammo(this, rndPosInWorld());
-	}
-	public void addArmour() {
-		for (int i = 0; i < Armour.maxCount; i++)
-			new Armour(this, rndPosInWorld());
 	}
 	
 
@@ -224,7 +214,7 @@ public class GameServer {
 		return null;
 	}
 
-	int maxPickupables = 350;
+	int maxPickupables = 50;
 	public static int minPlayerCount = 20;
 	public static int botDecay = 0;
 	public static float botDecayChance = 0.0001f;
@@ -269,9 +259,8 @@ public class GameServer {
 					try {Thread.sleep(timeToWait);} catch (InterruptedException e) {e.printStackTrace();}
 				}
 				try {
-					// Spawn food
+					// Spawn food up to 30 per frame
 					RefillPickupables(30);
-
 
 					synchronized (addedActiveEntities){
 						Iterator<Entry<Integer, Entity>> iterator = addedActiveEntities.entrySet().iterator();

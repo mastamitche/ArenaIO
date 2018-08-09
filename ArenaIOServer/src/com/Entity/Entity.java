@@ -56,8 +56,8 @@ public abstract class Entity implements ISpatialObject {
 		id = server.idHandler.AddEntry(this);
 		server.trees[entityType].add(this);
 		
-		//if (caresAboutNearby)
-		//	updateNearby(nearbyRadius);
+		if (caresAboutNearby)
+			updateNearby(nearbyRadius);
 	}
 	
 	public boolean isVisibleTo(Player p){return true;}

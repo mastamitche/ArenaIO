@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>2017.3.1f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -299,13 +297,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\AmmoSpawner.cs" />
     <Compile Include="Assets\Scripts\Bar.cs" />
     <Compile Include="Assets\Scripts\Bullet.cs" />
     <Compile Include="Assets\Scripts\Consts.cs" />
     <Compile Include="Assets\Scripts\Entity.cs" />
     <Compile Include="Assets\Scripts\EntityLerper.cs" />
     <Compile Include="Assets\Scripts\LocalState.cs" />
+    <Compile Include="Assets\Scripts\Master.cs" />
     <Compile Include="Assets\Scripts\Networking.cs" />
     <Compile Include="Assets\Scripts\NetworkingUtility.cs" />
     <Compile Include="Assets\Scripts\Openable\Openable.cs" />
@@ -337,6 +335,7 @@
     <Compile Include="Assets\Scripts\SmartUI\SmartUITextGroupItem.cs" />
     <Compile Include="Assets\Scripts\SmartUI\SmartVerticalScroll.cs" />
     <Compile Include="Assets\Scripts\SmartUI\TimeUtils.cs" />
+    <Compile Include="Assets\Scripts\UnityMainThreadDispatcher.cs" />
     <Compile Include="Assets\Scripts\Utils\FloatyText.cs" />
     <Compile Include="Assets\Scripts\Utils\FloatyTextManager.cs" />
     <Compile Include="Assets\Scripts\Utils\GamePrefabBatcher.cs" />
