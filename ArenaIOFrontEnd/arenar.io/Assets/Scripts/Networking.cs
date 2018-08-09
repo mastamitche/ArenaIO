@@ -78,7 +78,8 @@ public class Networking {
             using (BinaryReader reader = new BinaryReader(stream))
             {
                 int category = reader.ReadByte();
-                print("Got Category " + category);
+                /*if (Master.debugPackets)
+                    print("Got Category " + category);*/
 
                 if(category == c_serverParams)
                 {
@@ -93,9 +94,12 @@ public class Networking {
                 else if (category == c_setEntityPosition)
                 {
                     int ID = reader.ReadInt32();
-                    print("Setting position of " + ID);
-                    foreach(KeyValuePair<int,Entity> en in Entity.Entities)
-                        print("Entities "+ en.Key);
+                    if (Master.debugPackets)
+                    {
+                        /*print("Setting position of " + ID);
+                        foreach (KeyValuePair<int, Entity> en in Entity.Entities)
+                            print("Entities " + en.Key);*/
+                    }
                     float x = reader.ReadSingle();
                     float y = reader.ReadSingle();
                     float angle = NetworkingUtility.getAngleFromByte(reader.ReadByte());
@@ -118,8 +122,8 @@ public class Networking {
                     }
                     else
                     {
-                        if (Master.debugPackets)
-                            print("Trying to move not registered Entity with ID : " + ID);
+                        /*if (Master.debugPackets)
+                            print("Trying to move not registered Entity with ID : " + ID);*/
                     }
                 }
                 else if (category == c_entitySpawn)
@@ -209,6 +213,8 @@ public class Networking {
                     int ID = reader.ReadInt32();
                     if (Entity.Entities.ContainsKey(ID))
                     {
+                        if (Master.debugPackets)
+                            print("DeSpawning " + ID + " of Type " + ID);
                         GamePrefabBatcher.Destroy(Entity.Destroy(ID));
                     }else
                     {

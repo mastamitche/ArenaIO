@@ -126,7 +126,6 @@ public class serverDistributer extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, String message) {
 		try{
-			System.out.println("Got message " + message);
 			if (conn == null) return;
 			GameServer s = (GameServer) ((WebSocketImpl)conn).connectionHandler.server;
 			if (s != null)
@@ -139,8 +138,6 @@ public class serverDistributer extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, ByteBuffer blob) {
 		try{
-			System.out.println("Got message blob " +blob);
-			
 			if (conn == null || ((WebSocketImpl)conn).connectionHandler == null) return;
 			((WebSocketImpl)conn).connectionHandler.onMessage(conn, blob);
 		}catch(Exception e){
