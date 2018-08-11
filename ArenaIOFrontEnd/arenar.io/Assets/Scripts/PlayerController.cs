@@ -42,12 +42,12 @@ public class PlayerController : MonoBehaviour
 
     public void moveLayer()
     {
-        roomLayer.transform.position = pos * -1;
+        roomLayer.GetComponent<EntityLerper>().Lerp(pos*-1); 
     }
 
     public void moveLayer(Vector3 v3)
     {
-        roomLayer.transform.position = v3;
+        roomLayer.GetComponent<EntityLerper>().Lerp(v3 * -1);
     }
 
 
@@ -65,12 +65,12 @@ public class PlayerController : MonoBehaviour
     float lastAngle = 0;
     void onMoveOrRotate()
     {
-        float rot = transform.rotation.z;
-        if (lastMove == pos && lastAngle == rot) return;
+        if (lastMove == pos && lastAngle == angle) return;
         lastMove = pos;
-        lastAngle = rot;
-        Networking.sendPlayerMove(new Vector2(pos.x, pos.y), rot);
+        lastAngle = angle;
         moveLayer();
+        setAngle();
+        Networking.sendPlayerMove(new Vector2(pos.x, pos.y), NetworkingUtility.getAngleByte(angle));
     }
 
     void rotateTowardsMouse()
@@ -79,9 +79,14 @@ public class PlayerController : MonoBehaviour
         objectPos = Camera.main.WorldToScreenPoint(playerCircle.transform.position);
         mousePos.x = mousePos.x - objectPos.x;
         mousePos.y = mousePos.y - objectPos.y;
-        angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
-        playerCircle.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        angle = Mathf.Atan2(mousePos.y, mousePos.x);
+        //playerCircle.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         onMoveOrRotate();
+    }
+
+    public void setAngle()
+    {
+        playerCircle.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle * Mathf.Rad2Deg));
     }
 
 }

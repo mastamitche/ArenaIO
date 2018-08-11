@@ -62,7 +62,6 @@ public class Networking {
     void OnOpen()
     {
         Debug.Log("Connection open");
-        send(s_ping);
         send(s_spawn);
     }
 
@@ -89,6 +88,7 @@ public class Networking {
                 {
                     byte gamestate = reader.ReadByte();
                     int myID = reader.ReadInt32();
+                    print("MY ID being set " + myID);
                     LocalState.ID = myID;
                 }
                 else if (category == c_setEntityPosition)
@@ -103,6 +103,8 @@ public class Networking {
                     float x = reader.ReadSingle();
                     float y = reader.ReadSingle();
                     float angle = NetworkingUtility.getAngleFromByte(reader.ReadByte());
+                    //print("Moving ID " + ID);
+                    //print("Local state id " + LocalState.ID);
                     if (Entity.Entities.ContainsKey(ID))
                     {
                         Entity ent = Entity.Entities[ID];
@@ -112,12 +114,15 @@ public class Networking {
                             if (entLerp != null)
                             {
                                 entLerp.Lerp(new Vector3(x, y));
+                                entLerp.Lerp(angle);
                             }
                         }
                         else
                         {
-                            PlayerController player = Consts.instance.MainPlayer.transform.Find("Player").GetComponent<PlayerController>();
-                            player.moveLayer(new Vector3(x, y));
+                            //print("Moving myself " + x + " " + y + " Angle " + angle);
+                            //PlayerController player = Consts.instance.MainPlayer.GetComponent<PlayerController>();
+                            //player.moveLayer(new Vector3(x, y));
+                            //player.setAngle(angle);
                         }
                     }
                     else
@@ -245,7 +250,7 @@ public class Networking {
                 }
                 else if (category == c_pong)
                 {
-
+                
                 }
                 else
                     print("Couldn't find Category " + category);

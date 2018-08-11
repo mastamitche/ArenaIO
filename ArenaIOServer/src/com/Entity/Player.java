@@ -46,7 +46,7 @@ public class Player extends Entity {
 	}
 	
 	public Player(ConnectionHandler conn, GameServer gs, vec2 pos, byte color){
-		super(gs, (byte)0, pos, 12);
+		super(gs, (byte)0, pos, 20);
 		this.conn = conn;
 		server.addedActiveEntities.put((int) id, this);
 		angle = (float) (Math.random()*Math.PI*2);

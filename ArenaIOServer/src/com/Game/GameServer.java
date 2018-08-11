@@ -29,7 +29,7 @@ import com.Odessa.utility.vec2;
 
 public class GameServer {
 	
-	public int worldSize = 20;
+	public int worldSize = 50;
 	
 	public static float timeScale = 1;
 
@@ -215,7 +215,7 @@ public class GameServer {
 	}
 
 	int maxPickupables = 50;
-	public static int minPlayerCount = 20;
+	public static int minPlayerCount = 1;
 	public static int botDecay = 0;
 	public static float botDecayChance = 0.0001f;
 	public static boolean printServerLag = false;
@@ -304,7 +304,7 @@ public class GameServer {
 				        while (i.hasNext()){
 				        	ConnectionHandler p = i.next();
 							try{
-								p.ActuallySend();
+								//p.ActuallySend();
 							}catch (ConcurrentModificationException e){
 								e.printStackTrace();
 							}

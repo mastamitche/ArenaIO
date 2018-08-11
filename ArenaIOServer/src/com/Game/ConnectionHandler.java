@@ -84,7 +84,7 @@ public class ConnectionHandler {
 
 			int category = blob.get();
 
-			System.out.println("Got category " + category);
+			// System.out.println("Got category " + category);
 
 			if (category == s_spawn) {
 				if (player != null && !player.isDead)
@@ -110,11 +110,11 @@ public class ConnectionHandler {
 				byte color = (byte) (XSRandom.random() * 10);
 				player = new Player(this, server, pos, color);
 				player.name = server.nm.AddEntry("");
+				System.out.println("Player ID on Spawn " + player.id);
 				Send((byte) c_gameState, (byte) 1, player.id);
-				player.sendPositionReset();
+				//player.sendPositionReset();
 
 				Send(player.getSpawnPacket());
-
 				return;
 			}
 
@@ -138,6 +138,8 @@ public class ConnectionHandler {
 				vec2 pos = new vec2(blob.getFloat(), blob.getFloat());
 				player.setRotation(blob.get() / PacketHelper.RADIANSTOBYTE);
 				player.moveTo(pos);
+				System.out.println("Move to position " + pos);
+				player.sendPositionReset();
 				return;
 			}
 
@@ -201,6 +203,7 @@ public class ConnectionHandler {
 
 	public void Send(Object... args) {
 		ConvertToBytesAndSave(args);
+		ActuallySend();
 	}
 
 	ByteArrayOutputStream buf = new ByteArrayOutputStream();
