@@ -115,10 +115,6 @@ public abstract class Entity implements ISpatialObject {
         		continue;
         	}
         	
-        	//float radius2 = getRadius() + e.getRadius();
-            //if (!me.intersects(e.getBounds()))
-            //	listIterator.remove();
-            
         }
 		if (debug) System.out.println("Entries length after: " + entries.size());
         

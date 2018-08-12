@@ -70,7 +70,7 @@ MonoBehaviour:
   m_MinSize: {x: 787, y: 342}
   m_MaxSize: {x: 16012, y: 8042}
   vertical: 0
-  controlID: 10
+  controlID: 124
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -280,8 +280,8 @@ MonoBehaviour:
     y: 0
     width: 511
     height: 521
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 204, y: 221}
+  m_MaxSize: {x: 4004, y: 4021}
   m_ActualView: {fileID: 21}
   m_Panes:
   - {fileID: 21}
@@ -427,14 +427,14 @@ MonoBehaviour:
     height: 500
   m_PersistentViewDataDictionary: {fileID: 0}
   m_SceneLighting: 1
-  lastFramingTime: 20939.66019510049
+  lastFramingTime: 6032.77739533615
   m_2DMode: 1
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 20.93485, y: 19.754156, z: -1.3149052}
+    m_Target: {x: 1223.9469, y: -2866.4204, z: 0}
     speed: 2
-    m_Value: {x: 20.93485, y: 19.754156, z: -1.3149052}
+    m_Value: {x: 1223.9469, y: -2866.4204, z: 0}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -462,9 +462,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 143.41151
+    m_Target: 3.7483065
     speed: 2
-    m_Value: 143.41151
+    m_Value: 3.7483065
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -475,7 +475,7 @@ MonoBehaviour:
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 
   m_LastLockedObject: {fileID: 0}
-  m_ViewIsLockedToObject: 0
+  m_ViewIsLockedToObject: 1
 --- !u!114 &17
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -544,19 +544,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Scripts
+    - Assets/Prefab/Weapons/Projectiles
   m_ViewMode: 1
   m_StartGridSize: 61
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Prefab/Weapons/Projectiles
   m_LastFoldersGridSize: 61
   m_LastProjectPath: F:\ArenaIORepo\ArenaIO\ArenaIOFrontEnd\arenar.io
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 26280000
-    m_LastClickedID: 10278
-    m_ExpandedIDs: 0000000014280000262800004c280000ba280000
+    m_SelectedIDs: cc280000
+    m_LastClickedID: 10444
+    m_ExpandedIDs: 0000000014280000262800004c280000ba28000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -609,8 +609,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: ba290000
-    m_LastClickedInstanceID: 10682
+    m_SelectedInstanceIDs: 0e290000
+    m_LastClickedInstanceID: 10510
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: 7c290000ae1d0000101d0000161d0000b01f0000441d00004c91ffff58cfffffd61c0000e61c0000f81b000066260000fc1c0000fa1d0000821d0000d21d0000641c00006e1c0000261e00004c2900000226000094280000462700004e27000052290000dc1e00008e1d0000fc1e0000601f00003c1d0000481d0000981d00002a1c0000081f0000681c00002c2b0000181f0000181c00005e1d0000de1e0000041f000014260000ac2200009c210000be2000009c22000084210000b6210000602000000855feffd84700001a2c0000602d0000664800009e1f0000b01c000008220000f2220000fe220000141d000066200000102200003c1f000022230000aa320000541f00006a1f00005a1f00005092ffff801f0000ac8d00000e450100881f0000b227000020230000fe200000082100002c27000026270000f82d00004e2d00001a270000622800006e2200001c28000000000000de220000f628000012240000f6240000ca230000162300005437000028220000cc930000c222000094220000cc210000d6210000ce210000e22100001c220000ee3b0000cc280000
     m_RenameOverlay:
@@ -702,23 +702,23 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
-    m_LastClickedID: 0
-    m_ExpandedIDs: 9efbffff00000000
+    m_SelectedIDs: 58bcfcff
+    m_LastClickedID: -213928
+    m_ExpandedIDs: 7cfbffff9afbffff9cfbffff9efbfffff4ffffff000000007a29000088290000ba290000c2290000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: Bullet(Clone)
+      m_OriginalName: Bullet(Clone)
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: -213928
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 0
       m_ClientGUIView: {fileID: 5}
     m_SearchString: 

@@ -115,6 +115,9 @@ public class Networking {
                         if(!(ent is Bullet))
                         {
                             angle = NetworkingUtility.getAngleFromByte(reader.ReadByte());
+                        }else
+                        {
+                            print("Bullet moving x : y " + x + " : " + y);
                         }
                         if (ID != LocalState.ID)
                         {
@@ -130,7 +133,7 @@ public class Networking {
                             if (Master.debugPackets)
                                 print("Moving myself " + x + " " + y + " Angle " + angle);
                             PlayerController player = Consts.instance.MainPlayer.GetComponent<PlayerController>();
-                            player.moveLayer(new Vector3(x, y));
+                            player.movePlayer(new Vector3(x, y));
                             //player.setAngle(angle);
                         }
                     }
@@ -198,8 +201,11 @@ public class Networking {
                     {
                         float x = reader.ReadSingle();
                         float y = reader.ReadSingle();
+                        Vector3 velocity = new Vector3(reader.ReadSingle(), reader.ReadSingle());
                         GameObject bullet = GamePrefabBatcher.GetInstance(Consts.instance.bulletPrefab, Consts.instance.Entities.transform, new Vector3(x, y));
-                        bullet.GetComponent<Bullet>().SetEnt(ID);
+                        Bullet b = bullet.GetComponent<Bullet>();
+                        b.SetEnt(ID);
+                        b.setVelocity(velocity);
                     }
                     else if (EntityType == EntityTypes.TYPE_AMMO)
                     {
@@ -262,6 +268,7 @@ public class Networking {
                     LocalState.Armour = armour;
                     LocalState.Magazine = magazine;
                     LocalState.MagazineSize = magazineSize;
+                    print(LocalState.dumpState());
                     PlayerInfo();
                     Entity ent = Entity.Entities[ID];
                     ent.gameObject.transform.Find("InfoBars/Health").GetComponent<Bar>().updateDisplayBar(health, maxHealth);
@@ -273,6 +280,7 @@ public class Networking {
                     int gunID = reader.ReadInt32();
 
                     Entity ent = Entity.Entities[ID];
+                    if (ent == null) return;
                     ent.gameObject.GetComponent<PlayerWeaponController>().swapWeapon(gunID);
                     if (ID == LocalState.ID) { 
                         LocalState.GunID = gunID;

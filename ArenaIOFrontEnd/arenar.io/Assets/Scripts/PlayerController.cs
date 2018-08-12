@@ -43,11 +43,11 @@ public class PlayerController : MonoBehaviour
         roomLayer.GetComponent<EntityLerper>().Lerp(pos*-1); 
     }
 
-    public void moveLayer(Vector3 v3)
+    public void movePlayer(Vector3 v3)
     {
         // roomLayer.transform.position = v3 * -1;
         //roomLayer.GetComponent<EntityLerper>().Lerp(v3 * -1);
-        this.transform.position = v3;
+        transform.position = v3;
     }
 
 
@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
         lastAngle = angle;
         //moveLayer();
         setAngle();
-        Networking.sendPlayerMove(new Vector2(pos.x, pos.y), NetworkingUtility.getAngleByte(angle));
+        Networking.sendPlayerMove(new Vector2(pos.x, pos.y),angle);
     }
 
     void rotateTowardsMouse()

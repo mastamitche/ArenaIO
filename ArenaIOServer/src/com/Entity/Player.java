@@ -100,7 +100,7 @@ public class Player extends Entity {
 			return;
 		}
 		if ((runs+id) % 1 == 0){
-            HashMap<Integer, Entity> entities = getCollidingEntities(new byte[]{Entity.TYPE_AMMO, Entity.TYPE_SHOTGUN, Entity.TYPE_ARMOUR, Entity.TYPE_HEALTHPACK});
+            HashMap<Integer, Entity> entities = getCollidingEntities(new byte[]{Entity.TYPE_BULLET,Entity.TYPE_AMMO, Entity.TYPE_SHOTGUN, Entity.TYPE_ARMOUR, Entity.TYPE_HEALTHPACK});
             Iterator<Entry<Integer, Entity>> iterator = entities.entrySet().iterator();
             while(iterator.hasNext()){
                 Entity entry = iterator.next().getValue();
@@ -124,6 +124,9 @@ public class Player extends Entity {
 		}
 		else if(other instanceof Armour){
 			shouldDestroy = hit((Armour)other);
+		}
+		else if(other instanceof Bullet){
+			shouldDestroy = hit((Bullet)other);
 		}
 		if(shouldDestroy)
 			other.Destroy();
@@ -184,7 +187,7 @@ public class Player extends Entity {
 		}
 		// Tell everyone
 		try {
-			notifyOthers(getInfoPacket());
+			notifyOthersAndSelf(getInfoPacket());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -192,6 +195,7 @@ public class Player extends Entity {
 	}
 	
 	public boolean hit(Bullet b){
+		if(b.owner == this) return false;
 		takeDamage(b.getDamage());
 		return true;
 	}
@@ -241,12 +245,14 @@ public class Player extends Entity {
 		switch(gunID){
 			case 1:
 				//Shotgun
-				float spread = 10f;
-				float speed = 10f;
-				int bulletAmount = magazine -= (magazine >= 8 ? 8 : magazine);
-				for( int i=0; i < bulletAmount; i++ ){
-		        	vec2 barrelDirection = new vec2((float)Math.cos(angle - spread * bulletAmount/2 + spread * i) , (float)Math.sin(angle - spread * bulletAmount/2 + spread * i));
-		        	new Bullet(server, pos.add(new vec2(2,5)), barrelDirection.scale(speed), this.size, this);
+				float spread = 0.1f;
+				float speed = 50f;
+				int bullets = 4; // for now
+				int toShoot = magazine >= bullets? bullets: magazine;
+				magazine -= toShoot;
+				for( int i=0; i < toShoot; i++ ){
+		        	vec2 barrelDirection = new vec2((float)Math.cos(angle - spread * toShoot/2f + spread * i) , (float)Math.sin(angle - spread * toShoot/2f + spread * i));
+		        	new Bullet(server, pos.add(new vec2(2.5f,-2.5f).rotate(angle)), barrelDirection.scale(speed), this.size, this);
 				}
 				
 				break;
@@ -261,7 +267,7 @@ public class Player extends Entity {
 	public boolean hit(HealthPack hp){
 		health = (health += hp.amount) > maxHealth ? maxHealth: health;
 		try {
-			notifyOthers(getInfoPacket());
+			notifyOthersAndSelf(getInfoPacket());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -271,7 +277,7 @@ public class Player extends Entity {
 	public boolean hit(Armour ar){
 		armour = (armour += ar.amount) > maxArmour ? maxArmour: armour;
 		try {
-			notifyOthers(getInfoPacket());
+			notifyOthersAndSelf(getInfoPacket());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

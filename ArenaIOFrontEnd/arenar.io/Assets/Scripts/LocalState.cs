@@ -18,4 +18,9 @@ class LocalState
     public static int Magazine = 0;
     public static int MagazineSize =0;
 
+    public static string dumpState()
+    {
+        return " ID " + ID + " Gun ID " + " Color " + Color + " Size " + Size + " Name " + Name + " Health " + Health + " Max Health " + MaxHealth + " Armour " + Armour
+            + " Max Armour " + MaxArmour + " Ammo " + Ammo + " Magazine " + Magazine + " MagazineSize " + MagazineSize; 
+    }
 }

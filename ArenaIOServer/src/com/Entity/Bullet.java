@@ -27,9 +27,6 @@ public class Bullet extends Entity {
 		this.owner = owner;
 		server.addedActiveEntities.put((int) id, this);
 		checkRelevancyToOthers(10);
-		//if (velocity.y == 0){
-		//	System.out.println(velocity + " " + owner + " valid: " + (owner.isValid?"true" : "false"));
-		//}
 	}
 	
 	@Override
@@ -53,7 +50,7 @@ public class Bullet extends Entity {
 	}
 	
 	public float getDamage(){
-		return 1f + (size / 11f);
+		return 10;
 	}
 
 	int updateDelay = 1;
@@ -67,12 +64,6 @@ public class Bullet extends Entity {
 			
 			lastUpdateMS = time;
 			onMove();
-			try {
-				notifyOthersAndSelf(getPositionPacket());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 			// Hit players
 			Map<Integer, Entity> entities = getCollidingEntities(new byte[]{Entity.TYPE_PLAYER});
