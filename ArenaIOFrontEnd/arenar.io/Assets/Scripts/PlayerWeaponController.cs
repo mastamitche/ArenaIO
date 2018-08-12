@@ -25,12 +25,12 @@ public class PlayerWeaponController : MonoBehaviour {
 	void Update () {
 	}
 
-    public void swapWeapon(GameObject newWeapon)
+    public void swapWeapon(int gunID)
     {
+        GameObject newWeapon = GamePrefabBatcher.GetInstance(Consts.instance.guns[gunID], gunLocation.transform.parent);
         currentWeapon = newWeapon;
         newWeapon.transform.position = gunLocation.transform.position;
         newWeapon.transform.rotation = gunLocation.transform.rotation;
-        newWeapon.transform.SetParent(gunLocation.transform.parent);
     }
 
 }

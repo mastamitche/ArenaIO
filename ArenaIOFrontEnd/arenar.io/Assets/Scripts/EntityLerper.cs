@@ -9,7 +9,7 @@ public class EntityLerper : MonoBehaviour {
     float startAngle;
     float endAngle;
     
-    public float speed = 1F;
+    public float speed = 0.2f;
     private long startTime;
     private long startTimeAngle;
     private float len;
@@ -25,43 +25,20 @@ public class EntityLerper : MonoBehaviour {
     public void Lerp(Vector3 pos)
     {
         if (pos == transform.position) return;
-        startTime = System.DateTime.Now.Ticks;
-        start = transform.position;
         end = pos;
-        len = Vector3.Distance(start, end);
-        hasReachedEnd = false;
     }
     public void Lerp(float angle)
     {
-        if (angle == transform.rotation.z) return;
-        startTimeAngle = System.DateTime.Now.Ticks;
-        startAngle = transform.rotation.z;
+        angle *= Mathf.PI / 180;
+        if (angle == transform.eulerAngles.z) return;
         endAngle = angle;
-        lenAngle = Mathf.Abs(startAngle - endAngle);
-        hasReachedEndAngle = false;
     }
 
     // Follows the target position like with a spring
     void Update()
     {
-        if (!hasReachedEndAngle)
-        {
-            float dist = (System.DateTime.Now.Ticks - startTimeAngle) * speed;
-            float percent = dist / lenAngle;
-            
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, startAngle + endAngle * percent));
-            if (transform.rotation.z == endAngle)
-                hasReachedEndAngle = true;
-        }
-
-        if (!hasReachedEnd)
-        {
-            float dist = (System.DateTime.Now.Ticks  - startTime) ;
-            float percent = dist / len;
-            //print("Percent " + percent + " Dist and len " + dist + " " + len + "start " + start  + " end " + end + " time " + startTime);
-            transform.position = Vector3.Lerp(start, end, percent);
-            if (transform.position == end)
-                hasReachedEnd = true;
-        }
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.eulerAngles.z + (endAngle - transform.eulerAngles.z * speed)));
+        
+        transform.position = Vector3.Lerp(transform.position, end, speed);
     }
 }

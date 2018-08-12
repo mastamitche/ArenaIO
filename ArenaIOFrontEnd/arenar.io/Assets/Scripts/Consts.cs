@@ -5,6 +5,7 @@ using UnityEngine;
 public class Consts : MonoBehaviour {
 
     public List<Color> playercolors = new List<Color>();
+    public List<GameObject> guns = new List<GameObject>();
     public GameObject bulletPrefab;
     public GameObject playerPrefab;
     public GameObject healthPackPrefab;

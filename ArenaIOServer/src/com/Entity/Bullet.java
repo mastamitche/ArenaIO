@@ -39,9 +39,12 @@ public class Bullet extends Entity {
 	}
 
 
+	public byte[] getPositionPacket() throws Exception{
+		return PacketHelper.bytesFromParams(ConnectionHandler.c_setEntityPosition, id, pos);
+	}
 	@Override
 	byte[] getSpawnPacket() throws Exception {
-		return PacketHelper.bytesFromParams(ConnectionHandler.c_entitySpawn, Entity.TYPE_BULLET, id, owner.color, tellClientsOfOwner ? owner.id : -1, pos, velocity.scale(GameServer.timeScale),size);
+		return PacketHelper.bytesFromParams(ConnectionHandler.c_entitySpawn, Entity.TYPE_BULLET, id, pos, velocity.scale(GameServer.timeScale));
 	}
 
 	@Override
@@ -64,6 +67,12 @@ public class Bullet extends Entity {
 			
 			lastUpdateMS = time;
 			onMove();
+			try {
+				notifyOthersAndSelf(getPositionPacket());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			// Hit players
 			Map<Integer, Entity> entities = getCollidingEntities(new byte[]{Entity.TYPE_PLAYER});

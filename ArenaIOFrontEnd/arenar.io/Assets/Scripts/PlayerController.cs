@@ -8,7 +8,6 @@ public class PlayerController : MonoBehaviour
     public GameObject roomLayer;
 
     public float acceleration = 1;
-    public int weaponID = -1;
 
     public Vector3 pos = new Vector3();
 
@@ -18,7 +17,6 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -36,7 +34,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) vecToMove += new Vector3(1, 0, 0);
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) vecToMove += new Vector3(0, 1, 0);
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) vecToMove += new Vector3(0, -1, 0);
-        pos += vecToMove;
+        pos += vecToMove/4;
         onMoveOrRotate();
     }
 
@@ -47,16 +45,18 @@ public class PlayerController : MonoBehaviour
 
     public void moveLayer(Vector3 v3)
     {
-        roomLayer.GetComponent<EntityLerper>().Lerp(v3 * -1);
+        // roomLayer.transform.position = v3 * -1;
+        //roomLayer.GetComponent<EntityLerper>().Lerp(v3 * -1);
+        this.transform.position = v3;
     }
 
 
     public void checkWeaponInput()
     {
-        if (weaponID == -1) return;
-        if (Input.GetMouseButton(0) )
+        if (LocalState.GunID == -1) return;
+        if (Input.GetMouseButtonUp(0) )
             Networking.onPlayerFire();
-        if (Input.GetKey(KeyCode.R))
+        if (Input.GetKeyUp(KeyCode.R))
             Networking.onPlayerReload();
     }
 
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
         if (lastMove == pos && lastAngle == angle) return;
         lastMove = pos;
         lastAngle = angle;
-        moveLayer();
+        //moveLayer();
         setAngle();
         Networking.sendPlayerMove(new Vector2(pos.x, pos.y), NetworkingUtility.getAngleByte(angle));
     }

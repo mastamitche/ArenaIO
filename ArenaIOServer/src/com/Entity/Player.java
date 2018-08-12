@@ -22,13 +22,12 @@ public class Player extends Entity {
 	public int maxArmour = 100;
 	public int health = 100;
 	public int maxHealth = 100;
-	public int size = 10;
 	public int ammo = 0;
+	public int maxAmmo = 250;
 	public int magazine = 0;
 	public int magazineSize = 10;
-	public int maxAmmo = 250;
 	public boolean isInLeaderBoard = false;
-	public boolean canFire = true;
+	public boolean canFire = false;
 	public boolean canCollect = true;
 	public boolean canMove = true;
 	public boolean isEthereal = false;
@@ -46,7 +45,8 @@ public class Player extends Entity {
 	}
 	
 	public Player(ConnectionHandler conn, GameServer gs, vec2 pos, byte color){
-		super(gs, (byte)0, pos, 20);
+		super(gs, (byte)0, pos, 50);
+		this.size = 1000;
 		this.conn = conn;
 		server.addedActiveEntities.put((int) id, this);
 		angle = (float) (Math.random()*Math.PI*2);
@@ -92,13 +92,41 @@ public class Player extends Entity {
 	@Override
 	public void specifictick(int runs){
 		if (isDead || health <= 0){
-			// Follow top players, perhaps?
+
 			health = 0;
 			
 			if (this instanceof BotPlayer) kill();
 			
 			return;
 		}
+		if ((runs+id) % 1 == 0){
+            HashMap<Integer, Entity> entities = getCollidingEntities(new byte[]{Entity.TYPE_AMMO, Entity.TYPE_SHOTGUN, Entity.TYPE_ARMOUR, Entity.TYPE_HEALTHPACK});
+            Iterator<Entry<Integer, Entity>> iterator = entities.entrySet().iterator();
+            while(iterator.hasNext()){
+                Entity entry = iterator.next().getValue();
+                if (entry != null){
+                	Collision(entry);
+                }
+            }
+        }
+	}
+	
+	public void Collision(Entity other){
+		boolean shouldDestroy = false;
+		if(other instanceof Ammo){
+			shouldDestroy = hit((Ammo)other);
+		}
+		else if(other instanceof ShotGun){
+			shouldDestroy = hit((ShotGun)other);
+		}
+		else if(other instanceof HealthPack){
+			shouldDestroy = hit((HealthPack)other);
+		}
+		else if(other instanceof Armour){
+			shouldDestroy = hit((Armour)other);
+		}
+		if(shouldDestroy)
+			other.Destroy();
 	}
 	
 	static float movementHalflife = 400f;
@@ -163,33 +191,35 @@ public class Player extends Entity {
 		return health;
 	}
 	
-	public float hit(Bullet b){
-		float damageDone = takeDamage(b.getDamage());
-		return damageDone;
+	public boolean hit(Bullet b){
+		takeDamage(b.getDamage());
+		return true;
 	}
 
-	public float hit(Ammo a){
+	public boolean hit(Ammo a){
+		if(!canFire) return false;
 		ammo = (ammo += a.amount) > maxAmmo ? maxAmmo: ammo;
 		try {
-			conn.Send(getInfoPacket());
+			send(getInfoPacket());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return ammo;
+		return true;
 	}
 	
 	public void reload(){
 		if(ammo == 0) return;
-		magazine = ammo > magazineSize ? magazineSize : ammo;
-		ammo -= magazine;
+		int missing = magazineSize - magazine;
+		magazine = ammo > missing ? magazineSize : ammo;
+		ammo -= missing;
 		try {
-			conn.Send(getInfoPacket());
+			send(getInfoPacket());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public float hit(ShotGun g){
+	public boolean hit(ShotGun g){
 		gunID = 1;
 		canFire = true;
 		//Tell everyone
@@ -197,12 +227,12 @@ public class Player extends Entity {
 		magazine = magazineSize;
 		
 		try {
-			notifyOthers(getGunPacket());
-			conn.Send(getInfoPacket());
+			notifyOthersAndSelf(getGunPacket());
+			send(getInfoPacket());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return gunID;
+		return true;
 	}
 	
 	public void fire(){
@@ -211,8 +241,8 @@ public class Player extends Entity {
 		switch(gunID){
 			case 1:
 				//Shotgun
-				float spread = 2f;
-				float speed = 1f;
+				float spread = 10f;
+				float speed = 10f;
 				int bulletAmount = magazine -= (magazine >= 8 ? 8 : magazine);
 				for( int i=0; i < bulletAmount; i++ ){
 		        	vec2 barrelDirection = new vec2((float)Math.cos(angle - spread * bulletAmount/2 + spread * i) , (float)Math.sin(angle - spread * bulletAmount/2 + spread * i));
@@ -222,30 +252,30 @@ public class Player extends Entity {
 				break;
 		}
 		try {
-			conn.Send(getInfoPacket());
+			send(getInfoPacket());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public float hit(HealthPack hp){
+	public boolean hit(HealthPack hp){
 		health = (health += hp.amount) > maxHealth ? maxHealth: health;
 		try {
 			notifyOthers(getInfoPacket());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return health;
+		return true;
 	}
 
-	public float hit(Armour ar){
+	public boolean hit(Armour ar){
 		armour = (armour += ar.amount) > maxArmour ? maxArmour: armour;
 		try {
 			notifyOthers(getInfoPacket());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return armour;
+		return true;
 	}
 	
 	@Override
@@ -256,7 +286,7 @@ public class Player extends Entity {
 		return PacketHelper.bytesFromParams(ConnectionHandler.c_setEntityPosition, id, pos, PacketHelper.getAngleByte(angle));
 	}
 	public byte[] getInfoPacket() throws Exception{
-		return PacketHelper.bytesFromParams(ConnectionHandler.c_playerStats,id, health, maxHealth, armour, maxArmour, ammo, magazine, magazineSize);
+		return PacketHelper.bytesFromParams(ConnectionHandler.c_playerStats, id, health, maxHealth, armour, maxArmour, ammo, magazine, magazineSize);
 	}
 	public byte[] getGunPacket() throws Exception{
 		return PacketHelper.bytesFromParams(ConnectionHandler.c_playerEquip, id, gunID );

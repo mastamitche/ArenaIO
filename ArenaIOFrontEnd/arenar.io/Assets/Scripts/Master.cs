@@ -30,7 +30,7 @@ public class Master : MonoBehaviour
     public static string URLOverride = "192.168.1.12";//My local IP
     public static int PortOverride = 32320;
     public static bool isDev = false;
-    public static bool debugPackets = true;
+    public static bool debugPackets = false;
     public static Networking network;
 
     public static MonoBehaviour mono; // So that back-end tasks can call coroutines and such

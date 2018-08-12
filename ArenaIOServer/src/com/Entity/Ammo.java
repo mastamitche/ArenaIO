@@ -15,6 +15,7 @@ public class Ammo extends Entity {
 	public static Object countLock = new Object();
 	
 	public static int maxAmount =25;
+	public static int minAmount =10;
 	public int amount = 10;
 
 	public Ammo(GameServer server, vec2 pos, int amount) {
@@ -27,7 +28,7 @@ public class Ammo extends Entity {
 
 	public Ammo(GameServer server, vec2 pos) {
 		super(server, Entity.TYPE_AMMO, pos, 0);
-		amount = (int) (XSRandom.random() * maxAmount);
+		amount = minAmount +  (int) (XSRandom.random() * (maxAmount-minAmount));
 		synchronized (countLock) {
 			count++;
 		}

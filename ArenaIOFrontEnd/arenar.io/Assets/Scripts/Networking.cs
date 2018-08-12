@@ -27,10 +27,10 @@ public class Networking {
     public static byte c_name = 9;
 
 
-    public delegate void _PlayerInfo(int ID, int health, int armour, int ammo, int magazine, int magazineSize);
+    public delegate void _PlayerInfo();
     public static event _PlayerInfo PlayerInfo;
 
-    public delegate void _PlayerGun(int ID, int gunID);
+    public delegate void _PlayerGun();
     public static event _PlayerGun PlayerGun;
 
     static WebSocket socket;
@@ -88,7 +88,8 @@ public class Networking {
                 {
                     byte gamestate = reader.ReadByte();
                     int myID = reader.ReadInt32();
-                    print("MY ID being set " + myID);
+                    if (Master.debugPackets)
+                        print("MY ID being set " + myID);
                     LocalState.ID = myID;
                 }
                 else if (category == c_setEntityPosition)
@@ -96,18 +97,25 @@ public class Networking {
                     int ID = reader.ReadInt32();
                     if (Master.debugPackets)
                     {
-                        /*print("Setting position of " + ID);
+                        print("Setting position of " + ID);
                         foreach (KeyValuePair<int, Entity> en in Entity.Entities)
-                            print("Entities " + en.Key);*/
+                            print("Entities " + en.Key);
                     }
                     float x = reader.ReadSingle();
                     float y = reader.ReadSingle();
-                    float angle = NetworkingUtility.getAngleFromByte(reader.ReadByte());
-                    //print("Moving ID " + ID);
-                    //print("Local state id " + LocalState.ID);
+                    float angle = 0;
+
+                    if (Master.debugPackets)
+                        print("Moving ID " + ID);
+
                     if (Entity.Entities.ContainsKey(ID))
                     {
                         Entity ent = Entity.Entities[ID];
+
+                        if(!(ent is Bullet))
+                        {
+                            angle = NetworkingUtility.getAngleFromByte(reader.ReadByte());
+                        }
                         if (ID != LocalState.ID)
                         {
                             EntityLerper entLerp = ent.gameObject.GetComponent<EntityLerper>();
@@ -119,16 +127,17 @@ public class Networking {
                         }
                         else
                         {
-                            //print("Moving myself " + x + " " + y + " Angle " + angle);
-                            //PlayerController player = Consts.instance.MainPlayer.GetComponent<PlayerController>();
-                            //player.moveLayer(new Vector3(x, y));
+                            if (Master.debugPackets)
+                                print("Moving myself " + x + " " + y + " Angle " + angle);
+                            PlayerController player = Consts.instance.MainPlayer.GetComponent<PlayerController>();
+                            player.moveLayer(new Vector3(x, y));
                             //player.setAngle(angle);
                         }
                     }
                     else
                     {
-                        /*if (Master.debugPackets)
-                            print("Trying to move not registered Entity with ID : " + ID);*/
+                        if (Master.debugPackets)
+                            print("Trying to move not registered Entity with ID : " + ID);
                     }
                 }
                 else if (category == c_entitySpawn)
@@ -162,11 +171,19 @@ public class Networking {
                             player.GetComponent<Entity>().SetEnt(ID);
                         }else
                         {
-                            print("Setting player ID " + ID);
                             GameObject player = Consts.instance.MainPlayer.transform.Find("Player").gameObject;
                             player.GetComponent<Entity>().SetEnt(ID);
+                            LocalState.ID = ID;
+                            LocalState.Name = name;
+                            LocalState.Health = health;
+                            LocalState.MaxHealth = maxHealth;
+                            LocalState.Ammo = ammo;
+                            LocalState.MaxArmour = maxArmour;
+                            LocalState.Armour = armour;
+                            LocalState.Magazine = magazine;
+                            LocalState.MagazineSize = magazineSize;
+                            PlayerInfo();
                         }
-                        PlayerInfo(ID, health, armour, ammo, magazine, magazineSize);
                         Entity ent = Entity.Entities[ID];
                         ent.gameObject.transform.Find("InfoBars/Health").GetComponent<Bar>().updateDisplayBar(health, maxHealth);
                         ent.gameObject.transform.Find("InfoBars/Armour").GetComponent<Bar>().updateDisplayBar(armour, maxArmour);
@@ -182,7 +199,7 @@ public class Networking {
                         float x = reader.ReadSingle();
                         float y = reader.ReadSingle();
                         GameObject bullet = GamePrefabBatcher.GetInstance(Consts.instance.bulletPrefab, Consts.instance.Entities.transform, new Vector3(x, y));
-                        bullet.GetComponent<Pickupable>().SetEnt(ID);
+                        bullet.GetComponent<Bullet>().SetEnt(ID);
                     }
                     else if (EntityType == EntityTypes.TYPE_AMMO)
                     {
@@ -237,16 +254,31 @@ public class Networking {
                     int ammo = reader.ReadInt32();
                     int magazine = reader.ReadInt32();
                     int magazineSize = reader.ReadInt32();
-                    PlayerInfo(ID,health, armour, ammo, magazine, magazineSize);
+                    LocalState.ID = ID;
+                    LocalState.Health = health;
+                    LocalState.MaxHealth = maxHealth;
+                    LocalState.Ammo = ammo;
+                    LocalState.MaxArmour = maxArmour;
+                    LocalState.Armour = armour;
+                    LocalState.Magazine = magazine;
+                    LocalState.MagazineSize = magazineSize;
+                    PlayerInfo();
                     Entity ent = Entity.Entities[ID];
                     ent.gameObject.transform.Find("InfoBars/Health").GetComponent<Bar>().updateDisplayBar(health, maxHealth);
                     ent.gameObject.transform.Find("InfoBars/Armour").GetComponent<Bar>().updateDisplayBar(armour, maxArmour);
                 }
                 else if (category == c_playerEquip)
                 {
-                    int id = reader.ReadInt32();
+                    int ID = reader.ReadInt32();
                     int gunID = reader.ReadInt32();
-                    PlayerGun(id, gunID);
+
+                    Entity ent = Entity.Entities[ID];
+                    ent.gameObject.GetComponent<PlayerWeaponController>().swapWeapon(gunID);
+                    if (ID == LocalState.ID) { 
+                        LocalState.GunID = gunID;
+                        PlayerGun();
+                        PlayerInfo();
+                    }
                 }
                 else if (category == c_pong)
                 {

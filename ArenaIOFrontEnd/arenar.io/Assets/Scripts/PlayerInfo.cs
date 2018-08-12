@@ -8,36 +8,29 @@ public class PlayerInfo : MonoBehaviour {
     public Text ReloadText;
     public Text GunName;
 
-    private int gunID = -1;
-
 	// Use this for initialization
 	void Start () {
         ammoText.gameObject.SetActive(false);
         ReloadText.gameObject.SetActive(false);
         GunName.gameObject.SetActive(false);
-        Networking.PlayerInfo += InfoCross;
-    }
-    void InfoCross(int id, int health, int armour, int ammo, int magazine, int magazineSize)
-    {
-        if (id != LocalState.ID) return;
-        changeAmmo(magazine, magazineSize, ammo);
+        Networking.PlayerInfo += changeAmmo;
+        Networking.PlayerGun += changeGunName;
     }
 	
-    public void changeGunName(int ID)
+    public void changeGunName()
     {
-        if (ID == -1) return;
-        gunID = ID;
-        GunName.text = PlayerWeaponController.gunNames[ID];
+        if (LocalState.GunID == -1) return;
+        GunName.text = PlayerWeaponController.gunNames[LocalState.GunID];
         ammoText.gameObject.SetActive(true);
         GunName.gameObject.SetActive(true);
     }
 
 
-    public void changeAmmo(int magazine, int magazineSize, int ammo)
+    public void changeAmmo()
     {
-        if (gunID == -1) return;
-        ammoText.text = magazine + " / " + magazineSize + " : " + ammo;
-        if(magazine == 0)
+        if (LocalState.GunID == -1) return;
+        ammoText.text = LocalState.Magazine + " / " + LocalState.MagazineSize + " : " + LocalState.Ammo;
+        if(LocalState.Magazine == 0)
         {
             ReloadText.gameObject.SetActive(true);
         }else

@@ -110,7 +110,6 @@ public class ConnectionHandler {
 				byte color = (byte) (XSRandom.random() * 10);
 				player = new Player(this, server, pos, color);
 				player.name = server.nm.AddEntry("");
-				System.out.println("Player ID on Spawn " + player.id);
 				Send((byte) c_gameState, (byte) 1, player.id);
 				//player.sendPositionReset();
 
@@ -138,7 +137,6 @@ public class ConnectionHandler {
 				vec2 pos = new vec2(blob.getFloat(), blob.getFloat());
 				player.setRotation(blob.get() / PacketHelper.RADIANSTOBYTE);
 				player.moveTo(pos);
-				System.out.println("Move to position " + pos);
 				player.sendPositionReset();
 				return;
 			}
@@ -168,6 +166,10 @@ public class ConnectionHandler {
 								+ effectiveRange);
 					}
 				}
+				return;
+			}
+			if(category == s_reload){
+				player.reload();
 				return;
 			}
 
