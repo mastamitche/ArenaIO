@@ -37,7 +37,7 @@ public class Networking {
 
     public void Start()
     {
-        socket = new WebSocket("ws://192.168.1.12:32320");
+        socket = new WebSocket("ws://"+ Master.URLOverride+":"+Master.PortOverride);
         socket.OnOpen += (sender,e) => OnOpen();
         socket.OnClose += (sender, e) => OnClose();
         socket.OnError += (sender, e) => OnError();
