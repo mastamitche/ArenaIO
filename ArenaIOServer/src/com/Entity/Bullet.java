@@ -18,15 +18,19 @@ public class Bullet extends Entity {
 	vec2 velocity;
 	Player owner;
 	boolean tellClientsOfOwner;
+	long lifeTime = 2 *1000;
+	long spawnTime = 0;
 	
 	public Bullet(GameServer server, vec2 pos, vec2 velocity, int size, Player owner) {
 		super(server, Entity.TYPE_BULLET, pos, 0);
+		this.spawnTime = System.currentTimeMillis();
 		this.velocity = velocity;
 		lastUpdateMS = System.currentTimeMillis();
 		this.size = size;
 		this.owner = owner;
 		server.addedActiveEntities.put((int) id, this);
 		checkRelevancyToOthers(10);
+		print("spawning Bullet " + id);
 	}
 	
 	@Override
@@ -53,12 +57,11 @@ public class Bullet extends Entity {
 		return 10;
 	}
 
-	int updateDelay = 1;
+	int updateDelay = 5;
 	int currentDelay = 0;
 	long lastUpdate;
 	@Override
 	public void specifictick(int runs){
-		
 		if (++currentDelay == updateDelay){
 			long time = System.currentTimeMillis();
 			
@@ -76,6 +79,11 @@ public class Bullet extends Entity {
 	            	break;
 	            }
 	        }
+			if((spawnTime + lifeTime) < time){
+				// Been alive too long, time to die
+				this.Destroy();
+			}
+			currentDelay = 0;
 		}
 		
 	}

@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using UnityEngine;
 
 public class Master : MonoBehaviour
@@ -17,6 +20,9 @@ public class Master : MonoBehaviour
         DontDestroyOnLoad(transform.gameObject);
         instance = this;
         mono = this;
+#if UNITY_EDITOR
+        URLOverride = GetLocalIPAddress();
+#endif
         network = new Networking();
         runNetworking();
     }
@@ -26,6 +32,19 @@ public class Master : MonoBehaviour
         // Break this out so we can init with loading screen before we connect
         network.Start();
     }
+    public static string GetLocalIPAddress()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ip.ToString();
+            }
+        }
+        throw new Exception("No network adapters with an IPv4 address in the system!");
+    }
+
 
     public static string URLOverride = "192.168.1.12";//My local IP
     public static int PortOverride = 32320;

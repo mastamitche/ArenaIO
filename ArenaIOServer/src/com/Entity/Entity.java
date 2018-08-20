@@ -28,8 +28,9 @@ public abstract class Entity implements ISpatialObject {
 	public static final byte TYPE_AMMO = 3;
 	public static final byte TYPE_ARMOUR = 4;
 	public static final byte TYPE_HEALTHPACK = 5;
+	public static final byte TYPE_ROOM = 6;
 	
-	static byte[] allEntityTypes = new byte[]{Entity.TYPE_PLAYER, Entity.TYPE_SHOTGUN, Entity.TYPE_BULLET, Entity.TYPE_AMMO, Entity.TYPE_ARMOUR, TYPE_HEALTHPACK};
+	static byte[] allEntityTypes = new byte[]{Entity.TYPE_PLAYER, Entity.TYPE_SHOTGUN, Entity.TYPE_BULLET, Entity.TYPE_AMMO, Entity.TYPE_ARMOUR, TYPE_HEALTHPACK, Entity.TYPE_ROOM};
 	
 	public byte entityType;
 	@VariableReplication(maxBits=32)
@@ -253,8 +254,8 @@ public abstract class Entity implements ISpatialObject {
 			//if (this instanceof Player && !(this instanceof BotPlayer) && (Math.abs(newM.size() - relevantEntities.size()) > 20)){
 	    	//	System.out.println("New size: " + newM.size() + " old size: " + relevantEntities.size());
 			//}
-			
-    		
+
+
     		// Look to add (go through new entries, and if it isn't in old list, add it)
     		Iterator<Entry<Integer, Entity>> iterator = newM.entrySet().iterator();
 	        while(iterator.hasNext()){
@@ -286,6 +287,10 @@ public abstract class Entity implements ISpatialObject {
     	//if (lastParent != null)
     	//	lastParent.update(this);
     	parentTree.refresh(this);
+    }
+    
+    protected void print(String s){
+    	System.out.println(s);
     }
     
     public static boolean byteArrayContains(byte[] arr, byte b){

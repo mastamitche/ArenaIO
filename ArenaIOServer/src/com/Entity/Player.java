@@ -1,7 +1,11 @@
 package com.Entity;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import watford.util.quadtree.CircleDef;
@@ -43,7 +47,8 @@ public class Player extends Entity {
 			if (!isDead) isEthereal = false;
 		}
 	}
-	
+	public static List<Player> players = Collections.synchronizedList(new ArrayList<Player>());
+
 	public Player(ConnectionHandler conn, GameServer gs, vec2 pos, byte color){
 		super(gs, (byte)0, pos, 50);
 		this.size = 1000;
@@ -56,6 +61,7 @@ public class Player extends Entity {
 		this.color = color;
 		health = maxHealth;
 		armour = maxArmour;
+		players.add(this);
 	}
 	
 	@Override
@@ -65,10 +71,17 @@ public class Player extends Entity {
 			server.updatePlaying(-1);
 			if (!(this instanceof BotPlayer)) server.updatePlayers(-1);
 			server.nm.RemoveEntry(name);
+			players.remove(this);
 			conn = null; // don't bug the player with this entity anymore.
 		} catch (Exception e){
 			e.printStackTrace();
 		}
+	}
+	//TODO: Add dashing
+	private vec2 dashingTo = null;
+	public void dash(vec2 pos){
+		canMove = false;
+		dashingTo = pos;
 	}
 
 	public void moveTo(vec2 pos) {

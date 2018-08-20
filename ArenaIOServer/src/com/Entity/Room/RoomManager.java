@@ -1,0 +1,90 @@
+package com.Entity.Room;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.Entity.Entity;
+import com.Entity.Player;
+import com.Game.GameServer;
+import com.Odessa.utility.XSRandom;
+import com.Odessa.utility.vec2;
+
+public class RoomManager {
+	// Coordinates to rooms which are unique
+	public Map<vec2, Room> rooms = Collections.synchronizedMap(new HashMap<vec2, Room>());
+	// All rooms without all siblings (up,right,down,left)
+	public Map<Integer, Room> roomsNotCompleted = Collections.synchronizedMap(new HashMap<Integer, Room>());
+	// ID's lookup table so i don't have to send two floats up and down
+	public Map<Integer, Room> roomIDMap = Collections.synchronizedMap(new HashMap<Integer, Room>());
+	
+	public static int NEW_PLAYER_THRESHOLD = 2;
+	public static int MINIMUM_ROOMS = 5;
+	public GameServer server;
+
+	XSRandom rnd;
+	
+	public RoomManager(GameServer server){
+		this.server = server;
+	}
+	
+	public void tick(){
+		int playerCount = Player.players.size();
+		if(rooms.size() < MINIMUM_ROOMS ||
+				rooms.size() < playerCount/NEW_PLAYER_THRESHOLD) 
+	}
+	
+	Room createRoom(){
+		server.activeEntities.size()
+	}
+	
+	public vec2 findNextSlotAvailable(){
+		int pos = rnd.nextInt(roomsNotCompleted.size());
+		Room room = roomsNotCompleted.get(pos);
+		int start = rnd.nextInt(4);
+		for(int i=0;i< 4 ;i++){
+			int currPos = start++ % 4;
+			if(currPos ==0){
+				vec2 up = new vec2( room.coordinate.x, room.coordinate.y+1);
+				if(!rooms.containsKey(up))
+					return up;
+			}
+			if(currPos ==1){
+				vec2 right = new vec2( room.coordinate.x+1, room.coordinate.y);
+				if(!rooms.containsKey(right))
+					return right;
+			}
+			if(currPos ==2){
+				vec2 down = new vec2( room.coordinate.x, room.coordinate.y-1);
+				if(!rooms.containsKey(down))
+					return down;
+			}
+			if(currPos ==3){
+				vec2 down = new vec2( room.coordinate.x, room.coordinate.y-1);
+				if(!rooms.containsKey(down))
+					return down;
+			}
+		}
+		return null;
+	}
+	
+	// Retuns room array up:0, right:1, down:2, left:3; clockwise
+	public Room[] getNeighbourRooms(Room r){
+		Room[] retArr = new Room[4];
+		float x = r.coordinate.x;
+		float y = r.coordinate.y;
+		Room up = rooms.get(new vec2(x,y+1));
+		Room down = rooms.get(new vec2(x,y-1));
+		Room left = rooms.get(new vec2(x-1,y));
+		Room right = rooms.get(new vec2(x+1,y));
+		if(up != null)
+			retArr[0] = up;
+		if(down != null)
+			retArr[1] = down;
+		if(left != null)
+			retArr[0] = left;
+		if(right != null)
+			retArr[1] = right;
+		return retArr;
+	}
+}
