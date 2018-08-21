@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "arenar.io", "arenar.io.csproj", "{7AEC0BBC-7DAE-D60A-014D-6A86871651EF}"
 EndProject
 Global
