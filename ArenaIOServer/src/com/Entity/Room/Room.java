@@ -1,12 +1,20 @@
 package com.Entity.Room;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.Entity.Entity;
+import com.Game.ConnectionHandler;
+import com.Odessa.utility.PacketHelper;
 import com.Odessa.utility.vec2;
 
-public class Room implements java.io.Serializable{
+public class Room{
+	public static byte TYPE_BASIC = 0;
+	
 	private static final long serialVersionUID = 1L;
 
 	public static String[] ORENTAION_TO_WORD = new String[]{"Up","Right","Down","Left"};
@@ -16,12 +24,12 @@ public class Room implements java.io.Serializable{
 	public static int roomIDs = 0;
 	public List<Door> doors = Collections.synchronizedList(new ArrayList<Door>());
 	public Tile[] tiles;
-	public RoomType type;
+	public byte type;
 	public vec2 coordinate;
 	public int ID = roomIDs++;
 	public byte orientation;
 	
-	public Room (vec2 coordinate, byte orientation, RoomType type ){
+	public Room (vec2 coordinate, byte orientation, byte type ){
 		this.coordinate = coordinate;
 		this.orientation = orientation;
 		this.type = type;
@@ -60,11 +68,25 @@ public class Room implements java.io.Serializable{
 		}
 		return ret;
 	}
+	
+	public static Room LoadRoom(File f){
+		try {
+			Files.readAllBytes(f.toPath());
+		} catch (IOException e) {
+			System.out.println("Failed to load File " + f.getName());
+			e.printStackTrace();
+		}
+	}
 
 
-	byte[] getSpawnPacket() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	byte[] getSpawnPacket() throws Exception {	
+		ArrayList<Byte> tileArr = new ArrayList<Byte>();
+		for(int i = 0; i < 9 ; i ++){
+			byte[] pack = tiles[i].getSpawnPacket();
+			for(int j = 0; j < pack.length; j++ )
+				tileArr.add(pack[j]);
+		}
+		return PacketHelper.bytesFromParams(ConnectionHandler.c_room, ID, type,orientation,tileArr); 
 	}
 
 }

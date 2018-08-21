@@ -68,6 +68,7 @@ public class ConnectionHandler {
 	public static byte c_playerEquip = 6;
 	public static byte c_pong = 8;
 	public static byte c_name = 9;
+	public static byte c_room = 10;
 
 	public static float sizeMultiplier = (float) (0.5f / Math.PI);
 
