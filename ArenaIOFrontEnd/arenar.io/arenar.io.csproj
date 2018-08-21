@@ -346,6 +346,7 @@
     <Compile Include="Assets\Scripts\Utils\FloatyText.cs" />
     <Compile Include="Assets\Scripts\Utils\FloatyTextManager.cs" />
     <Compile Include="Assets\Scripts\Utils\GamePrefabBatcher.cs" />
+    <Compile Include="Assets\Scripts\Utils\RoomManager.cs" />
     <Compile Include="Assets\Scripts\Utils\ScreenHeightText.cs" />
     <Compile Include="Assets\Scripts\Utils\UIScroller.cs" />
     <Compile Include="Assets\Scripts\websocket-sharp\AssemblyInfo.cs" />
