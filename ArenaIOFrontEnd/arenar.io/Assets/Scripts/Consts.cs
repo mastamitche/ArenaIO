@@ -14,6 +14,7 @@ public class Consts : MonoBehaviour {
     public GameObject shotGunPrefab;
     public GameObject Entities;
     public GameObject MainPlayer;
+    public GameObject RoomPrefab;
 
     public static Consts instance;
 	// Use this for initialization
