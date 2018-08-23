@@ -25,6 +25,7 @@ public class Networking {
     public static byte c_playerEquip = 6;
     public static byte c_pong = 8;
     public static byte c_name = 9;
+    public static byte c_room = 10;
 
 
     public delegate void _PlayerInfo();
@@ -134,7 +135,6 @@ public class Networking {
                                 print("Moving myself " + x + " " + y + " Angle " + angle);
                             PlayerController player = Consts.instance.MainPlayer.GetComponent<PlayerController>();
                             player.movePlayer(new Vector3(x, y));
-                            //player.setAngle(angle);
                         }
                     }
                     else
@@ -288,9 +288,19 @@ public class Networking {
                         PlayerInfo();
                     }
                 }
-                else if (category == c_pong)
+                else if (category == c_pong) { }
+                else if (category == c_room)
                 {
-                
+                    int roomID = reader.ReadInt32();
+                    bool spawn = reader.ReadBoolean();
+                    if (spawn)
+                    {
+                        int roomType = reader.ReadByte();
+                        int orientation = reader.ReadByte();
+                        int x = reader.ReadByte();
+                        int y = reader.ReadByte();
+                        GameObject r = RoomManager.instance.CreateRoom(roomType, new Vector2(x, y), roomID);
+                    }
                 }
                 else
                     print("Couldn't find Category " + category);

@@ -20,17 +20,17 @@ public class Room{
 	
 	// All rooms 30 * 30 because they are 9 x 9 tiles so 10 each
 	public static int ROOM_SIZE = 2000;
-	public static int roomIDs = 0;
 	public Tile[] tiles;
 	public byte type;
 	public vec2 coordinate;
-	public int ID = roomIDs++;
+	public int ID = 0;
 	public byte orientation;
 	
-	public Room (vec2 coordinate, byte orientation, byte type ){
+	public Room (vec2 coordinate, byte orientation, byte type , int ID){
 		this.coordinate = coordinate;
 		this.orientation = orientation;
 		this.type = type;
+		this.ID = ID;
 	}
 	public Room (byte orientation, byte type ){
 		this.coordinate = new vec2(0,0);
@@ -91,7 +91,7 @@ public class Room{
 	public static Room LoadRoom(File f){
 		try {
 			ByteBuffer arr = ByteBuffer.wrap( Files.readAllBytes(f.toPath()));
-			int version = arr.getInt();
+			byte version = arr.get();
 			if(version == 1){
 				Tile[] tiles = new Tile[9];
 				for(byte i = 0; i <9 ; i++){
@@ -103,7 +103,7 @@ public class Room{
 					};
 					tiles[i] = new Tile(walls,i);
 				}
-				Room room = new Room((byte)0,(byte)0);
+				Room room = new Room((byte)0,(byte)Integer.parseInt(f.getName()));
 				room.tiles = tiles;
 				return room;
 			}
@@ -125,13 +125,7 @@ public class Room{
 
 
 	byte[] getSpawnPacket() throws Exception {	
-		ArrayList<Byte> tileArr = new ArrayList<Byte>();
-		for(int i = 0; i < 9 ; i ++){
-			byte[] pack = tiles[i].getSpawnPacket();
-			for(int j = 0; j < pack.length; j++ )
-				tileArr.add(pack[j]);
-		}
-		return PacketHelper.bytesFromParams(ConnectionHandler.c_room, ID, type,orientation,tileArr); 
+		return PacketHelper.bytesFromParams(ConnectionHandler.c_room, ID, true, type, orientation, coordinate); 
 	}
 
 }

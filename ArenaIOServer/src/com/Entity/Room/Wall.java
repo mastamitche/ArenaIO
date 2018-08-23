@@ -18,13 +18,13 @@ public class Wall {
 		this.open = open;
 	}
 	
-	byte[] getSpawnPacket() throws Exception {
+	/*//Maybe send
+	 * byte[] getSpawnPacket() throws Exception {
 		// Don't need to send the coords because we will send them in order
 		// ORDER: TL TM TR, ML MM MR, BL BM BR
 		return PacketHelper.bytesFromParams(
 				orientation,
 				open
 				); 
-	}
-	
+	}*/	
 }

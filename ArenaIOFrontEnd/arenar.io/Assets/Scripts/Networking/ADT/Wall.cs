@@ -4,20 +4,37 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-class Wall
+public class Wall
 {
     public int orientation = -1;
+    public int coord;
     public bool open = false;
-    public GameObject reference;
+    GameObject reference;
 
-    public Wall(int orientation, bool open)
+    public Wall( int coord, int orientation, bool open)
     {
+        this.coord = coord;
         this.orientation = orientation;
         this.open = open;
     }
-    public void changeDoorSate( bool open)
+
+    public void setReferenceObject(GameObject go, bool open)
+    {
+        reference = go;
+        changeDoorState(open);
+    }
+
+    public void changeDoorState( bool open)
     {
         this.open = open;
-        reference.SetActive(open);
+        if(reference)
+            reference.SetActive(open);
+    }
+    public byte[] getBytes()
+    {
+        return new byte[]
+        {
+            (byte)(open? 1:0)
+        };
     }
 }

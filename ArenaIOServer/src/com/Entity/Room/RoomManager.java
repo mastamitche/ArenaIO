@@ -26,6 +26,7 @@ public class RoomManager {
 
 	public static int NEW_PLAYER_THRESHOLD = 2;
 	public static int MINIMUM_ROOMS = 5;
+	public static int RoomIDCounter = 0;
 	public GameServer server;
 
 	XSRandom rnd;
@@ -56,14 +57,24 @@ public class RoomManager {
 				|| rooms.size() < playerCount / NEW_PLAYER_THRESHOLD) {
 			try {
 				Room room =createNext();
+				if( !isRoomComplete(room)){
+					roomsNotCompleted.put(room.ID, room);
+				}
+				rooms.put(room.coordinate, room);
 			} catch (Exception e) {
 				System.err.println("Trouble create new rooms");
 			}
 		}
 	}
+	
+	boolean isRoomComplete(Room r){
+		//TODO
+		return true;
+	}
 
-	Room createRoom(int type, vec2 pos) {
-		Room rm= ROOMS.get(type).clone();
+	Room createRoom(Room room, vec2 pos) {
+		Room rm= room.clone();
+		rm.ID = RoomIDCounter++;
 		rm.coordinate = pos;
 		return rm;
 	}
@@ -96,23 +107,31 @@ public class RoomManager {
 			int currPos = start++ % 4;
 			if (currPos == 0) {
 				vec2 up = new vec2(room.coordinate.x, room.coordinate.y + 1);
-				if (!rooms.containsKey(up))
-					room.coordinate = up;
+				if (!rooms.containsKey(up)){
+					room = createRoom(room,up);
+					break;
+				}
 			}
 			if (currPos == 1) {
 				vec2 right = new vec2(room.coordinate.x + 1, room.coordinate.y);
-				if (!rooms.containsKey(right))
-					room.coordinate = right;
+				if (!rooms.containsKey(right)){
+					room = createRoom(room,right);
+					break;
+				}
 			}
 			if (currPos == 2) {
 				vec2 down = new vec2(room.coordinate.x, room.coordinate.y - 1);
-				if (!rooms.containsKey(down))
-					room.coordinate = down;
+				if (!rooms.containsKey(down)){
+					room = createRoom(room,down);
+					break;
+				}
 			}
 			if (currPos == 3) {
 				vec2 left = new vec2(room.coordinate.x, room.coordinate.y - 1);
-				if (!rooms.containsKey(left))
-					room.coordinate = left;
+				if (!rooms.containsKey(left)){
+					room = createRoom(room,left);
+					break;
+				}
 			}
 		}
 		return room;
